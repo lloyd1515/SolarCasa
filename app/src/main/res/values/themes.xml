@@ -1,0 +1,4 @@
+<resources>
+    <style name="Theme.SolarCasa" parent="android:Theme.Material.Light.NoActionBar" />
+    <color name="launcher_background">#1E5B3A</color>
+</resources>
