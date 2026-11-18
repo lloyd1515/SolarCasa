@@ -167,4 +167,54 @@ object EnergyMath {
         val final = car.percent + (tomorrowSurplusKwh + if (car.acceptGrid) grid else 0.0) * 100 / car.capacityKwh
         return CarPlan(grid, grid * PRICE_LEI_PER_KWH, final.roundToInt().coerceAtMost(100))
     }
+
+    // ---- Sarcina 7: production report for the supplier -----------------------------------------
+
+    /** Reporting periods. All end on 31.12.2026, the date of the last meter index in the app. */
+    enum class ReportPeriod(val label: String, val dates: String, val months: IntRange) {
+        Semester("Ultimul semestru", "01.07.2026 – 31.12.2026", 6..11),
+        Quarter("Ultimul trimestru", "01.10.2026 – 31.12.2026", 9..11),
+        Year("Anul 2026", "01.01.2026 – 31.12.2026", 0..11),
+    }
+
+    /** The meter and the inverter count separately, so a difference up to this value is a match. */
+    const val INDEX_TOLERANCE_KWH = 10
+
+    enum class Reading { Match, Manual, BelowStart, TooHigh }
+
+    data class SupplierReport(
+        val injected: Int,
+        val fromGrid: Int,
+        val startIndex: Int,
+        val endIndex: Int,
+        val difference: Int,
+        val reading: Reading,
+    )
+
+    /**
+     * Totals and meter indexes (register 2.8.0) of [period]. A [meterReading] that differs from the app
+     * by more than [INDEX_TOLERANCE_KWH] replaces the app index and changes the injected total (Sarcina 7, E1).
+     */
+    fun supplierReport(period: ReportPeriod, meterReading: Int? = null): SupplierReport {
+        val appIndex = DemoData.METER_INDEX_INJECTED
+        val appInjected = period.months.sumOf { DemoData.injected[it] }
+        val start = appIndex - appInjected
+        val difference = meterReading?.minus(appIndex) ?: 0
+        val reading = when {
+            meterReading == null || abs(difference) <= INDEX_TOLERANCE_KWH -> Reading.Match
+            meterReading < start -> Reading.BelowStart
+            meterReading > appIndex + appInjected -> Reading.TooHigh
+            else -> Reading.Manual
+        }
+        val end = if (reading == Reading.Manual && meterReading != null) meterReading else appIndex
+        return SupplierReport(end - start, period.months.sumOf { DemoData.fromGrid[it] }, start, end, difference, reading)
+    }
+
+    private val POD_FORMAT = Regex("RO\\d{3}E\\d{9}")
+
+    /** POD code of a Romanian metering point: "RO", 3 digits, "E", 9 digits (invoice example: RO001E111050736). */
+    fun isValidPod(code: String): Boolean = POD_FORMAT.matches(code.filterNot(Char::isWhitespace).uppercase())
+
+    fun sameSerial(a: String, b: String): Boolean =
+        a.filterNot(Char::isWhitespace).equals(b.filterNot(Char::isWhitespace), ignoreCase = true)
 }

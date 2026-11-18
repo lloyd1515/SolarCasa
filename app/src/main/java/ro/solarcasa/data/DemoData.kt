@@ -77,14 +77,21 @@ object DemoData {
     val weeksNov2025 = listOf(86.0, 96.0, 104.0, 114.0)
     const val SOLD_NOV_2026 = 96
 
-    // ---- Sarcina 7: prosumer, second half of 2026 (kWh) ----------------------------------------
-    val prosumerMonths = listOf("iulie", "august", "septembrie", "octombrie", "noiembrie", "decembrie")
-    val injected = listOf(600, 580, 498, 370, 96, 40)
-    val fromGrid = listOf(90, 95, 118, 226, 312, 204)
-    const val INJECTED_2026 = 3984
-    const val FROM_GRID_2026 = 2615
+    // ---- Sarcina 7: prosumer, 2026 (kWh per month) ---------------------------------------------
+    // Production = consumption − from the grid + injected: January – June follow PVGIS within 2%.
+    val MONTH_NAMES = listOf(
+        "ianuarie", "februarie", "martie", "aprilie", "mai", "iunie",
+        "iulie", "august", "septembrie", "octombrie", "noiembrie", "decembrie",
+    )
+    val injected = listOf(50, 90, 260, 340, 390, 400, 600, 580, 498, 370, 96, 40)
+    val fromGrid = listOf(290, 180, 120, 95, 85, 80, 90, 95, 118, 226, 312, 204)
+    /** The supplier regularized the first half of 2026: 1,530 kWh injected − 850 kWh from the grid. */
+    const val LAST_REGULARIZATION = "30.06.2026"
+    /** Register 2.8.0 (energy injected into the grid) of the meter on 31.12.2026, as the app knows it. */
     const val METER_INDEX_INJECTED = 8412
     const val SUPPLIER = "Electrica Furnizare"
+    /** Demo address on the reserved ".example" domain, so a test e-mail never reaches a real supplier. */
+    const val SUPPLIER_EMAIL = "prosumatori@furnizor.example"
     const val POD = "RO005E512345678"
     const val METER_SERIAL = "ZMD 36 210 455"
 

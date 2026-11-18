@@ -133,6 +133,7 @@ data class House(
     val boilerFeedbackWrong: Boolean = false,
     val savedPlans: List<String> = emptyList(),
     val savedSimulations: List<String> = emptyList(),
+    val prosumerReport: String? = null,
     val history: List<ActionRecord> = emptyList(),
     val message: UserMessage? = null,
 )

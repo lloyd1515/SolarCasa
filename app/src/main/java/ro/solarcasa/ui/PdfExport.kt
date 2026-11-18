@@ -7,13 +7,18 @@ import android.graphics.pdf.PdfDocument
 import androidx.core.content.FileProvider
 import java.io.File
 
-/** Writes a simple A4 PDF report and opens the Android share sheet (download, e-mail, Drive …). */
+/**
+ * Writes a simple A4 PDF report and opens the Android share sheet (download, e-mail, Drive …).
+ * A tab in a line starts a new table column. With [emailTo], e-mail apps get the recipient and [body]
+ * (26_common_intents: ACTION_SEND with EXTRA_EMAIL and EXTRA_STREAM).
+ */
 object PdfExport {
     private const val WIDTH = 595
     private const val HEIGHT = 842
     private const val MARGIN = 40f
+    private const val COLUMN = 170f
 
-    fun share(context: Context, fileName: String, title: String, lines: List<String>) {
+    fun share(context: Context, fileName: String, title: String, lines: List<String>, emailTo: String? = null, body: String? = null) {
         val doc = PdfDocument()
         val text = Paint().apply { textSize = 11f; isAntiAlias = true }
         val heading = Paint().apply { textSize = 16f; isFakeBoldText = true; isAntiAlias = true }
@@ -27,7 +32,7 @@ object PdfExport {
                 page = doc.startPage(PdfDocument.PageInfo.Builder(WIDTH, HEIGHT, ++number).create())
                 y = 60f
             }
-            page.canvas.drawText(line, MARGIN, y, text)
+            line.split('\t').forEachIndexed { i, cell -> page.canvas.drawText(cell, MARGIN + i * COLUMN, y, text) }
             y += 17f
         }
         doc.finishPage(page)
@@ -42,6 +47,7 @@ object PdfExport {
             .putExtra(Intent.EXTRA_STREAM, uri)
             .putExtra(Intent.EXTRA_SUBJECT, title)
             .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        if (emailTo != null) send.putExtra(Intent.EXTRA_EMAIL, arrayOf(emailTo)).putExtra(Intent.EXTRA_TEXT, body)
         context.startActivity(Intent.createChooser(send, title))
     }
 }

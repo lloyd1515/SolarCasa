@@ -59,6 +59,7 @@ class HouseRepository(initial: House = DemoData.house(Scenario.SunnyNoon)) {
             car = old.car,
             savedPlans = old.savedPlans,
             savedSimulations = old.savedSimulations,
+            prosumerReport = old.prosumerReport,
             history = old.history,
         )
     }

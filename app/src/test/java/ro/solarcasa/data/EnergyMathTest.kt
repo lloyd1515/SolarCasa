@@ -92,4 +92,40 @@ class EnergyMathTest {
         assertEquals("≈ 40 min", SolarAssistant.hours(0.66))
         assertEquals("≈ 14 ore", SolarAssistant.hours(14.2))
     }
+
+    @Test
+    fun `second half of 2026 matches the Etapa 5 scenario (Sarcina 7)`() {
+        val r = EnergyMath.supplierReport(EnergyMath.ReportPeriod.Semester)
+        assertEquals(2184, r.injected)
+        assertEquals(1045, r.fromGrid)
+        assertEquals(6228, r.startIndex)
+        assertEquals(EnergyMath.Reading.Match, r.reading)
+    }
+
+    @Test
+    fun `a meter reading 27 kWh higher replaces the app index (Sarcina 7, E1)`() {
+        val r = EnergyMath.supplierReport(EnergyMath.ReportPeriod.Semester, meterReading = 8439)
+        assertEquals(EnergyMath.Reading.Manual, r.reading)
+        assertEquals(27, r.difference)
+        assertEquals(8439, r.endIndex)
+        assertEquals(2211, r.injected)
+    }
+
+    @Test
+    fun `small differences are a match and impossible readings are rejected`() {
+        val p = EnergyMath.ReportPeriod.Semester
+        assertEquals(EnergyMath.Reading.Match, EnergyMath.supplierReport(p, 8418).reading)
+        assertEquals(8412, EnergyMath.supplierReport(p, 8418).endIndex)
+        assertEquals(EnergyMath.Reading.BelowStart, EnergyMath.supplierReport(p, 6000).reading)
+        assertEquals(EnergyMath.Reading.TooHigh, EnergyMath.supplierReport(p, 84120).reading)
+    }
+
+    @Test
+    fun `POD codes need RO, 3 digits, E and 9 digits`() {
+        assertTrue(EnergyMath.isValidPod("RO005E512345678"))
+        assertTrue(EnergyMath.isValidPod("ro005e 512 345 678"))
+        assertTrue(!EnergyMath.isValidPod("RO005E51234567"))
+        assertTrue(!EnergyMath.isValidPod(""))
+        assertTrue(EnergyMath.sameSerial("ZMD36210455", "ZMD 36 210 455"))
+    }
 }
