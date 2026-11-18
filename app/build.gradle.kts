@@ -33,6 +33,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true // version name in "Mai mult > Despre"
     }
 }
 
