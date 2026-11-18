@@ -6,11 +6,11 @@ import java.util.Locale
 private val ro: Locale = Locale.forLanguageTag("ro-RO")
 
 /** Romanian number formats: decimal comma, dot for thousands ("6.800", "4,8"). */
-fun Double.dec(digits: Int = 1): String = "%.${digits}f".format(ro, this)
+fun Double.fmt(digits: Int = 1): String = "%.${digits}f".format(ro, this)
 
 fun Number.grouped(): String = NumberFormat.getIntegerInstance(ro).format(this.toLong())
 
-fun Double.kw(): String = "${dec()} kW"
+fun Double.kw(): String = "${fmt()} kW"
 
 fun Number.kwh(): String = "${grouped()} kWh"
 

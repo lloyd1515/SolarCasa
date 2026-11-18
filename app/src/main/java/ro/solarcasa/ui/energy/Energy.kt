@@ -55,7 +55,7 @@ import ro.solarcasa.ui.components.PrimaryButton
 import ro.solarcasa.ui.components.ScreenScaffold
 import ro.solarcasa.ui.components.Series
 import ro.solarcasa.ui.components.Tag
-import ro.solarcasa.ui.dec
+import ro.solarcasa.ui.fmt
 import ro.solarcasa.ui.kw
 import ro.solarcasa.ui.kwh
 import ro.solarcasa.ui.screenViewModel
@@ -152,7 +152,7 @@ fun ConsumerDetailScreen(id: String, onBack: () -> Unit) {
     val c = DemoData.consumers.first { it.id == id }
     ScreenScaffold(c.name, onBack = onBack) {
         Text(
-            "${c.kwh.kwh()} în noiembrie (≈ ${(c.kwh * EnergyMath.PRICE_LEI_PER_KWH).dec(0)} lei), ${c.changePercent.signedPercent()} față de octombrie",
+            "${c.kwh.kwh()} în noiembrie (≈ ${(c.kwh * EnergyMath.PRICE_LEI_PER_KWH).fmt(0)} lei), ${c.changePercent.signedPercent()} față de octombrie",
             style = MaterialTheme.typography.titleMedium,
         )
         if (!c.measured) {
@@ -227,7 +227,7 @@ fun BatterySettingsScreen(onBack: () -> Unit) {
         // The consequence of each value, in hours and kWh (Etapa 5, sarcina 11).
         Text(
             "Bateria nu va coborî sub $reserve%. În caz de pană de curent ai mereu ${vm.essentialHoursAt(reserve)} pentru consumatorii esențiali. " +
-                "Din rețea vei cumpăra în plus ≈ ${EnergyMath.extraWinterGridKwhPerDay(reserve).dec()} kWh pe zi, iarna.",
+                "Din rețea vei cumpăra în plus ≈ ${EnergyMath.extraWinterGridKwhPerDay(reserve).fmt()} kWh pe zi, iarna.",
             style = MaterialTheme.typography.bodyLarge,
         )
         if (h.batteryPercent < reserve) {

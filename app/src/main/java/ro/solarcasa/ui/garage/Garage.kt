@@ -38,7 +38,7 @@ import ro.solarcasa.ui.components.InfoCard
 import ro.solarcasa.ui.components.PrimaryButton
 import ro.solarcasa.ui.components.ScreenScaffold
 import ro.solarcasa.ui.components.Tag
-import ro.solarcasa.ui.dec
+import ro.solarcasa.ui.fmt
 import ro.solarcasa.ui.screenViewModel
 
 class GarageViewModel(private val repository: HouseRepository) : ViewModel() {
@@ -58,7 +58,7 @@ class GarageViewModel(private val repository: HouseRepository) : ViewModel() {
         val text = when {
             c.mode == ChargeMode.Normal -> "Mașina se încarcă acum, din orice sursă."
             c.mode == ChargeMode.Smart || c.acceptGrid ->
-                "Până la ${c.minTime} mașina ajunge la ${c.minPercent}% (≈ ${p.gridCostLei.dec(0)} lei din rețea), apoi se încarcă din soare până la ${p.finalPercent}%."
+                "Până la ${c.minTime} mașina ajunge la ${c.minPercent}% (≈ ${p.gridCostLei.fmt(0)} lei din rețea), apoi se încarcă din soare până la ${p.finalPercent}%."
             else -> "Mașina se va încărca mâine între ~10:00 și ~15:00, estimat până la ${p.finalPercent}%. Te anunțăm când pornește încărcarea."
         }
         val old = repository.house.value.car
@@ -116,7 +116,7 @@ fun GarageScreen(onBack: () -> Unit) {
             AiCard(
                 title = "Atenție la nivelul minim",
                 text = "Mâine este prognozat soare de la 10:00. Până la ${car.minTime} nu va fi surplus. " +
-                    "Pentru ${car.minPercent}% ar trebui folosiți ${plan.gridKwhForMinimum.dec(0)} kWh din rețea (≈ ${plan.gridCostLei.dec(0)} lei).",
+                    "Pentru ${car.minPercent}% ar trebui folosiți ${plan.gridKwhForMinimum.fmt(0)} kWh din rețea (≈ ${plan.gridCostLei.fmt(0)} lei).",
                 why = "Prognoza meteo pentru Cluj-Napoca și consumul obișnuit al casei de dimineață.",
             ) {
                 if (car.acceptGrid) {

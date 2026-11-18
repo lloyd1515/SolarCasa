@@ -45,7 +45,7 @@ import ro.solarcasa.ui.components.InfoCard
 import ro.solarcasa.ui.components.ScreenScaffold
 import ro.solarcasa.ui.components.SectionTitle
 import ro.solarcasa.ui.components.Tag
-import ro.solarcasa.ui.dec
+import ro.solarcasa.ui.fmt
 import ro.solarcasa.ui.kw
 import ro.solarcasa.ui.screenViewModel
 import ro.solarcasa.ui.theme.statusColors
@@ -199,7 +199,7 @@ private fun BalanceCard(ui: HomeViewModel.UiState) {
                 },
             )
         }
-        Text("Economisit azi: ${4.9.dec(2)} lei", style = MaterialTheme.typography.bodyMedium)
+        Text("Economisit azi: ${4.9.fmt(2)} lei", style = MaterialTheme.typography.bodyMedium)
     }
 }
 
@@ -269,7 +269,7 @@ private fun FitDetails(a: Appliance, surplus: Double, fits: Boolean, vm: HomeVie
 }
 
 private fun stateText(a: Appliance) = when (a.state) {
-    RunState.RunningSolar -> "În funcțiune – energie solară. Economie estimată: ${(a.kw * a.runHours * EnergyMath.PRICE_LEI_PER_KWH).dec(2)} lei"
+    RunState.RunningSolar -> "În funcțiune – energie solară. Economie estimată: ${(a.kw * a.runHours * EnergyMath.PRICE_LEI_PER_KWH).fmt(2)} lei"
     RunState.RunningGrid -> "În funcțiune – parțial din rețea"
     RunState.Scheduled -> "Programat: pornește automat la surplus, ${a.scheduledAt}"
     RunState.Off -> "Oprit"
