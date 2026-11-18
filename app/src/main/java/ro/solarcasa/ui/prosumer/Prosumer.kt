@@ -348,7 +348,7 @@ private fun ReadyStep(ui: ProsumerViewModel.UiState, onEmail: () -> Unit, onSave
         Text("PDF-ul conține antetul, tabelul lunar, totalurile și indexurile.", style = MaterialTheme.typography.bodySmall)
     }
     PrimaryButton("Trimite pe e-mail către furnizor", onEmail)
-    OutlinedButton(onSave, Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text("Descarcă PDF") }
+    OutlinedButton(onSave, Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text("Salvează sau partajează PDF") }
     TextButton(onChange) { Text("Modifică datele") }
 }
 

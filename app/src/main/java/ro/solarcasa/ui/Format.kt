@@ -10,12 +10,15 @@ fun Double.fmt(digits: Int = 1): String = "%.${digits}f".format(ro, this)
 
 fun Number.grouped(): String = NumberFormat.getIntegerInstance(ro).format(this.toLong())
 
-fun Double.kw(): String = "${fmt()} kW"
+/** A no-break space keeps the number and its unit on the same line ("1.045 kWh"). */
+private const val NBSP = "\u00A0"
 
-fun Number.kwh(): String = "${grouped()} kWh"
+fun Double.kw(): String = "${fmt()}${NBSP}kW"
 
-fun Number.lei(): String = "${grouped()} lei"
+fun Number.kwh(): String = "${grouped()}${NBSP}kWh"
 
-fun Number.eur(): String = "${grouped()} €"
+fun Number.lei(): String = "${grouped()}${NBSP}lei"
+
+fun Number.eur(): String = "${grouped()}${NBSP}€"
 
 fun Int.signedPercent(): String = if (this > 0) "+$this%" else "$this%"

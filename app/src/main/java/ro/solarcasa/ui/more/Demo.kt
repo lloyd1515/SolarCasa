@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
@@ -115,7 +115,7 @@ fun DemoScreen(onBack: () -> Unit) {
             // 28_notification_permission: ask in context, after a user action, and say what the notifications are for.
             InfoCard(title = "Notificările sunt oprite", icon = R.drawable.ic_notifications, container = MaterialTheme.colorScheme.secondaryContainer) {
                 Text("Alerta de producție și pana de curent încep cu o notificare. Fără permisiune, scenariile pornesc fără ea.")
-                FilledTonalButton({
+                Button({
                     if (denied || Build.VERSION.SDK_INT < 33) openNotificationSettings(context)
                     else askPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
                 }) { Text(if (denied) "Deschide setările notificărilor" else "Permite notificările") }
