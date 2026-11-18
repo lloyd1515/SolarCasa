@@ -28,6 +28,11 @@ object DemoData {
                 solarKw = 2.4, baseLoadKw = 0.9, batteryPercent = 82, alerts = listOf(stringAlert, dustAlert),
             )
             Scenario.GridOutage -> base.copy(solarKw = 0.0, batteryPercent = 64, surplusUntil = null, gridDown = true)
+            // Sarcina 6, Scenariul B: after 6 hours only the essential circuits are on.
+            Scenario.LongOutage -> base.copy(
+                solarKw = 0.0, batteryPercent = 18, surplusUntil = null, gridDown = true,
+                circuits = circuits.map { it.copy(on = it.essential) },
+            )
         }
     }
 

@@ -9,19 +9,26 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import ro.solarcasa.MainActivity
 import ro.solarcasa.R
 
-/** Push notifications for alerts. A tap opens the right screen (deep link through MainActivity). */
+/**
+ * Push notifications for alerts. A tap opens the right screen (deep link through MainActivity).
+ * 28_notification_permission: check `areNotificationsEnabled()` before a notification is sent.
+ */
 object Notifier {
     private const val CHANNEL = "alerts"
 
-    fun post(context: Context, id: Int, title: String, text: String, open: String) {
+    fun allowed(context: Context): Boolean =
+        (Build.VERSION.SDK_INT < 33 || context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) &&
+            NotificationManagerCompat.from(context).areNotificationsEnabled()
+
+    /** Returns false when the user did not allow notifications. */
+    fun post(context: Context, id: Int, title: String, text: String, open: String): Boolean {
         val manager = context.getSystemService(NotificationManager::class.java)
         manager.createNotificationChannel(NotificationChannel(CHANNEL, "Alerte casă", NotificationManager.IMPORTANCE_HIGH))
-        if (Build.VERSION.SDK_INT >= 33 &&
-            context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
-        ) return
+        if (!allowed(context)) return false
         val intent = Intent(context, MainActivity::class.java)
             .putExtra(MainActivity.EXTRA_OPEN, open)
             .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -37,5 +44,6 @@ object Notifier {
             .setAutoCancel(true)
             .build()
         manager.notify(id, notification)
+        return true
     }
 }

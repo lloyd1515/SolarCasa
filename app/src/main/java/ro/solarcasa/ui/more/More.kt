@@ -140,13 +140,3 @@ private fun About() {
         Text("Asistentul Solar rulează local, fără internet. Nicio acțiune nu pornește fără confirmarea ta.")
     }
 }
-
-@Composable
-fun HistoryScreen(onBack: () -> Unit) {
-    ScreenScaffold("Istoric acțiuni", onBack = onBack) { Text("În lucru") }
-}
-
-@Composable
-fun DemoScreen(onBack: () -> Unit) {
-    ScreenScaffold("Scenarii demo", onBack = onBack) { Text("În lucru") }
-}

@@ -6,6 +6,7 @@ enum class Scenario(val title: String, val clock: String) {
     CloudyMorning("Marți, 09:30 – cer înnorat", "09:30"),
     ProductionFault("Miercuri, 14:00 – producție scăzută", "14:00"),
     GridOutage("Seara, 20:15 – pană de curent", "20:15"),
+    LongOutage("Noaptea, 02:15 – pană de 6 ore", "02:15"),
 }
 
 enum class Balance { Surplus, Even, Deficit }
